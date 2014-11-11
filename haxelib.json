@@ -1,0 +1,11 @@
+{
+  "name": "dots",
+  "url": "https://github.com/fponticelli/dots",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["thx", "general", "cross", "std"],
+  "description": "DOTS - Dom Tools",
+  "releasenote": "initial release",
+  "version": "0.0.1",
+  "contributors": ["fponticelli"]
+}
