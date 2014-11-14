@@ -1,5 +1,5 @@
 -js bin/test.js
 -main TestAll
 -cp src
--cp demo
+-cp test
 -lib utest
