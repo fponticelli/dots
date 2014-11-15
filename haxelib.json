@@ -3,7 +3,7 @@
   "url": "https://github.com/fponticelli/dots",
   "license": "MIT",
   "classPath": "src",
-  "tags": ["thx", "general", "cross", "std"],
+  "tags": ["dom", "html", "js"],
   "description": "DOTS - Dom Tools",
   "releasenote": "initial release",
   "version": "0.0.1",
