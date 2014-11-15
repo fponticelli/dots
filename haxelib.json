@@ -6,6 +6,9 @@
   "tags": ["dom", "html", "js"],
   "description": "DOTS - Dom Tools",
   "releasenote": "initial release",
-  "version": "0.0.1",
-  "contributors": ["fponticelli"]
+  "version": "0.0.2",
+  "contributors": ["fponticelli"],
+  "dependencies": {
+    "thx.core": ""
+  }
 }
