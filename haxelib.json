@@ -5,8 +5,8 @@
   "classPath": "src",
   "tags": ["dom", "html", "js"],
   "description": "DOTS - Dom Tools",
-  "releasenote": "initial release",
-  "version": "0.0.2",
+  "releasenote": "Added Dom.addCss()",
+  "version": "0.1.0",
   "contributors": ["fponticelli"],
   "dependencies": {
     "thx.core": ""
