@@ -1,18 +1,18 @@
 package dots;
 
-import js.html.Element;
+import js.html.DOMElement as Element;
 import js.html.NodeList;
 
 class Query {
   static var doc : Element = untyped __js__('document');
 
-  public static function first(selector : String, ?ctx : js.html.Element) : Element
+  public static function first(selector : String, ?ctx : Element) : Element
     return (ctx != null ? ctx : doc).querySelector(selector);
 
-  public static function list(selector : String, ?ctx : js.html.Element) : NodeList
+  public static function list(selector : String, ?ctx : Element) : NodeList
     return (ctx != null ? ctx : doc).querySelectorAll(selector);
 
-  public inline static function all(selector : String, ?ctx : js.html.Element) : Array<Element>
+  public inline static function all(selector : String, ?ctx : Element) : Array<Element>
     return Html.nodeListToArray(list(selector, ctx));
 
   public static function getElementIndex(el : Element) {

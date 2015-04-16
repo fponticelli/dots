@@ -2,7 +2,7 @@ package dots;
 
 using StringTools;
 import js.Browser;
-import js.html.Element;
+import js.html.DOMElement as Element;
 import js.html.Node;
 import js.html.NodeList;
 
