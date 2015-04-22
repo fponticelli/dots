@@ -5,8 +5,8 @@
   "classPath": "src",
   "tags": ["dom", "html", "js"],
   "description": "DOTS - Dom Tools",
-  "releasenote": "Added Dom.addCss()",
-  "version": "0.1.0",
+  "releasenote": "Updates for Haxe v.3.2 and updated package for thx.core",
+  "version": "0.1.1",
   "contributors": ["fponticelli"],
   "dependencies": {
     "thx.core": ""
