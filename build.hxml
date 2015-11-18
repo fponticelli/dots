@@ -3,3 +3,6 @@
 -cp src
 -cp test
 -lib utest
+-lib thx.core
+
+dots.Attributes
