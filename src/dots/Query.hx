@@ -1,6 +1,6 @@
 package dots;
 
-import js.html.DOMElement as Element;
+import js.html.Element;
 import js.html.NodeList;
 
 class Query {

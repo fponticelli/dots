@@ -2,7 +2,7 @@ package dots;
 
 using StringTools;
 import js.Browser;
-import js.html.DOMElement as Element;
+import js.html.Element;
 import js.html.Node;
 import js.html.NodeList;
 
@@ -26,7 +26,7 @@ class Html {
   public inline static function parseArray(html : String) : Array<Element>
     return nodeListToArray(parseNodes(html));
 
-  public inline static function parse(html : String) : Element
+  public static function parse(html : String) : Element
     return cast parseNodes(html)[0];
 
   public inline static function nodeListToArray(list : NodeList) : Array<Element>

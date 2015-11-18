@@ -1,10 +1,10 @@
 package dots;
 
-import js.html.DOMElement;
+import js.html.Element;
 import js.Browser.*;
 
 class Dom {
-  public static function addCss(css : String, ?container : DOMElement) {
+  public static function addCss(css : String, ?container : Element) {
     if(null == container)
       container = document.head;
     var style = document.createStyleElement();
