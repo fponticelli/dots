@@ -12,4 +12,20 @@ class Dom {
     style.appendChild(document.createTextNode(css));
     container.appendChild(style);
   }
+
+  public static function getValue(el : Element)
+    return switch el.nodeName {
+      case "input":
+        var input : js.html.InputElement = cast el;
+        input.value;
+      case "textarea":
+        var textarea : js.html.TextAreaElement = cast el;
+        textarea.value;
+      case "select":
+        var select : js.html.SelectElement = cast el,
+            option : js.html.OptionElement = cast select.options.item(select.selectedIndex);
+        option.value;
+      case _:
+        el.innerHTML;
+    };
 }
