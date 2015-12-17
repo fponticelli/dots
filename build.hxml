@@ -6,7 +6,7 @@
 -lib thx.core
 
 dots.Attributes
-# dots.Collections
+dots.Collections
 dots.Detect
 dots.Dom
 dots.Html
