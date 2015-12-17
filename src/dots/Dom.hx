@@ -2,6 +2,7 @@ package dots;
 
 import js.html.Element;
 import js.Browser.*;
+import haxe.ds.Either;
 
 class Dom {
   public static function addCss(css : String, ?container : Element) {
@@ -13,11 +14,12 @@ class Dom {
     container.appendChild(style);
   }
 
-  public static function getValue(el : Element) {
+  public static function getValue(el : Element) : Null<String> {
     return switch el.nodeName {
       case "INPUT":
         var input : js.html.InputElement = cast el;
-        input.value;
+        if (input.type == "checkbox" && !input.checked) null;
+        else input.value;
       case "TEXTAREA":
         var textarea : js.html.TextAreaElement = cast el;
         textarea.value;
@@ -27,6 +29,35 @@ class Dom {
         option.value;
       case _:
         el.innerHTML;
+      };
+  }
+
+  public static function getMultiValue(el : Element) : Either<String, Array<String>> {
+    return switch el.nodeName {
+      case "INPUT":
+        var input : js.html.InputElement = cast el;
+        if (input.type == "checkbox" && !input.checked) Right([]);
+        else Left(input.value);
+      case "TEXTAREA":
+        var textarea : js.html.TextAreaElement = cast el;
+        Left(textarea.value);
+      case "SELECT":
+        var select : js.html.SelectElement = cast el;
+        if (select.multiple) {
+          var values = [];
+          var options = select.selectedOptions;
+          for(i in 0...options.length)
+            values.push((cast options[i] : js.html.OptionElement).value);
+
+          Right(values);
+        }
+        else {
+          var option : js.html.OptionElement = cast select.options.item(select.selectedIndex);
+          Left(option.value);
+        }
+
+      case _:
+        Left(el.innerHTML);
       };
   }
 }
