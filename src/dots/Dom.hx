@@ -14,7 +14,7 @@ class Dom {
     container.appendChild(style);
   }
 
-  public static function getValue(el : Element) {
+  public static function getValue(el : Element) : Null<String> {
     return switch el.nodeName {
       case "INPUT":
         var input : js.html.InputElement = cast el;
@@ -36,7 +36,8 @@ class Dom {
     return switch el.nodeName {
       case "INPUT":
         var input : js.html.InputElement = cast el;
-        Left(input.value);
+        if (input.type == "checkbox" && !input.checked) Right([]);
+        else Left(input.value);
       case "TEXTAREA":
         var textarea : js.html.TextAreaElement = cast el;
         Left(textarea.value);
