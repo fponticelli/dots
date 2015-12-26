@@ -107,4 +107,12 @@ class Dom {
     return { width : doc.documentElement.scrollWidth, height : doc.documentElement.scrollHeight };
   }
 
+  public static function scrollTop(?doc : Document) {
+    if(null == doc) doc = document;
+    if(null != document.documentElement)
+      return document.documentElement.scrollTop;
+    else
+      return document.body.scrollTop;
+  }
+
 }
