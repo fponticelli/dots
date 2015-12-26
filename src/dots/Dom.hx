@@ -1,6 +1,7 @@
 package dots;
 
 import js.html.Element;
+import js.html.Window;
 import js.Browser.*;
 import haxe.ds.Either;
 
@@ -59,5 +60,35 @@ class Dom {
       case _:
         Left(el.innerHTML);
       };
+  }
+
+  public static function getWindowHeight(?win : Window) : Int {
+    if(null == win) win = window;
+    return win.document.documentElement.clientHeight;
+  }
+
+  public static function getWindowWidth(?win : Window) : Int {
+    if(null == win) win = window;
+    return win.document.documentElement.clientWidth;
+  }
+
+  public static function getWindowSize(?win : Window) : { width : Int, height : Int } {
+    if(null == win) win = window;
+    return { width : win.document.documentElement.clientWidth, height : win.document.documentElement.clientHeight };
+  }
+
+  public static function getWindowInnerHeight(?win : Window) : Int {
+    if(null == win) win = window;
+    return win.innerHeight;
+  }
+
+  public static function getWindowInnerWidth(?win : Window) : Int {
+    if(null == win) win = window;
+    return win.innerWidth;
+  }
+
+  public static function getWindowInnerSize(?win : Window) : { width : Int, height : Int } {
+    if(null == win) win = window;
+    return { width : win.innerWidth, height : win.innerHeight };
   }
 }
