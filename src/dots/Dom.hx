@@ -1,5 +1,6 @@
 package dots;
 
+import js.html.Document;
 import js.html.Element;
 import js.html.Window;
 import js.Browser.*;
@@ -15,7 +16,7 @@ class Dom {
     container.appendChild(style);
   }
 
-  public static function getValue(el : Element) : Null<String> {
+  public static function getValue(el : Element) : Null<String>
     return switch el.nodeName {
       case "INPUT":
         var input : js.html.InputElement = cast el;
@@ -31,9 +32,8 @@ class Dom {
       case _:
         el.innerHTML;
       };
-  }
 
-  public static function getMultiValue(el : Element) : Either<String, Array<String>> {
+  public static function getMultiValue(el : Element) : Either<String, Array<String>>
     return switch el.nodeName {
       case "INPUT":
         var input : js.html.InputElement = cast el;
@@ -59,8 +59,7 @@ class Dom {
 
       case _:
         Left(el.innerHTML);
-      };
-  }
+    };
 
   public static function getWindowHeight(?win : Window) : Int {
     if(null == win) win = window;
