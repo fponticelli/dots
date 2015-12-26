@@ -91,4 +91,20 @@ class Dom {
     if(null == win) win = window;
     return { width : win.innerWidth, height : win.innerHeight };
   }
+
+  public static function getDocumentHeight(?doc : Document) : Int {
+    if(null == doc) doc = document;
+    return doc.documentElement.scrollHeight;
+  }
+
+  public static function getDocumentWidth(?doc : Document) : Int {
+    if(null == doc) doc = document;
+    return doc.documentElement.scrollWidth;
+  }
+
+  public static function getDocumentSize(?doc : Document) : { width : Int, height : Int } {
+    if(null == doc) doc = document;
+    return { width : doc.documentElement.scrollWidth, height : doc.documentElement.scrollHeight };
+  }
+
 }
