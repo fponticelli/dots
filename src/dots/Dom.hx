@@ -1,6 +1,7 @@
 package dots;
 
 import js.html.Document;
+import js.html.HTMLDocument;
 import js.html.Element;
 import js.html.Window;
 import js.Browser.*;
@@ -112,6 +113,15 @@ class Dom {
       return document.documentElement.scrollTop;
     else
       return document.body.scrollTop;
+  }
+
+  public static function offset(el : Element, ?doc : HTMLDocument) {
+    if(null == doc) doc = document;
+    var rect = el.getBoundingClientRect();
+    return {
+      top: rect.top + doc.body.scrollTop,
+      left: rect.left + doc.body.scrollLeft
+    };
   }
 
 }
