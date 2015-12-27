@@ -148,4 +148,13 @@ class Dom {
   inline public static function position(el : Element)
     return { left: el.offsetLeft, top: el.offsetTop };
 
+  public static function ready(fn : Void -> Void, doc : Document) {
+    if(null == doc) doc = document;
+    if (doc.readyState != 'loading'){
+      fn();
+    } else {
+      doc.addEventListener('DOMContentLoaded', fn);
+    }
+  }
+
 }
