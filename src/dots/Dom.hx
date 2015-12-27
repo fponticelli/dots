@@ -157,4 +157,7 @@ class Dom {
     }
   }
 
+  inline public static function empty(el : Element)
+    el.innerHTML = "";
+
 }
