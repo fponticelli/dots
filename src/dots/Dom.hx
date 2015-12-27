@@ -124,4 +124,25 @@ class Dom {
     };
   }
 
+  public static function offsetParent(el : Element)
+    return null != el.offsetParent ? el.offsetParent : el;
+
+  inline public static function outerHeight(el : Element)
+    return el.offsetHeight;
+
+  public static function outerHeightWithMargin(el : Element) {
+    var h = el.offsetHeight,
+        s = Style.style(el);
+    return h + Std.parseInt(s.marginTop) + Std.parseInt(s.marginBottom);
+  }
+
+  inline public static function outerWidth(el : Element)
+    return el.offsetWidth;
+
+  public static function outerWidthWithMargin(el : Element) {
+    var h = el.offsetWidth,
+        s = Style.style(el);
+    return h + Std.parseInt(s.marginLeft) + Std.parseInt(s.marginRight);
+  }
+
 }
