@@ -145,4 +145,7 @@ class Dom {
     return h + Std.parseInt(s.marginLeft) + Std.parseInt(s.marginRight);
   }
 
+  inline public static function position(el : Element)
+    return { left: el.offsetLeft, top: el.offsetTop };
+
 }
