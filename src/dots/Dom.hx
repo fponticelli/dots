@@ -107,7 +107,7 @@ class Dom {
     return { width : doc.documentElement.scrollWidth, height : doc.documentElement.scrollHeight };
   }
 
-  public static function scrollTop(?doc : Document) {
+  public static function getScrollTop(?doc : Document) {
     if(null == doc) doc = document;
     if(null != document.documentElement)
       return document.documentElement.scrollTop;
@@ -115,37 +115,37 @@ class Dom {
       return document.body.scrollTop;
   }
 
-  public static function offset(el : Element, ?doc : HTMLDocument) {
+  public static function getOffset(el : Element, ?doc : HTMLDocument) {
     if(null == doc) doc = document;
     var rect = el.getBoundingClientRect();
     return {
-      top: rect.top + doc.body.scrollTop,
-      left: rect.left + doc.body.scrollLeft
+      top: Math.round(rect.top + doc.body.scrollTop),
+      left: Math.round(rect.left + doc.body.scrollLeft)
     };
   }
 
-  public static function offsetParent(el : Element)
+  public static function getOffsetParent(el : Element)
     return null != el.offsetParent ? el.offsetParent : el;
 
-  inline public static function outerHeight(el : Element)
+  inline public static function getOuterHeight(el : Element)
     return el.offsetHeight;
 
-  public static function outerHeightWithMargin(el : Element) {
+  public static function getOuterHeightWithMargin(el : Element) {
     var h = el.offsetHeight,
         s = Style.style(el);
     return h + Std.parseInt(s.marginTop) + Std.parseInt(s.marginBottom);
   }
 
-  inline public static function outerWidth(el : Element)
+  inline public static function getOuterWidth(el : Element)
     return el.offsetWidth;
 
-  public static function outerWidthWithMargin(el : Element) {
+  public static function getOuterWidthWithMargin(el : Element) {
     var h = el.offsetWidth,
         s = Style.style(el);
     return h + Std.parseInt(s.marginLeft) + Std.parseInt(s.marginRight);
   }
 
-  inline public static function position(el : Element)
+  inline public static function getPosition(el : Element)
     return { left: el.offsetLeft, top: el.offsetTop };
 
   public static function ready(fn : Void -> Void, doc : Document) {
