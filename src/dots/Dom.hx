@@ -107,12 +107,12 @@ class Dom {
     return { width : doc.documentElement.scrollWidth, height : doc.documentElement.scrollHeight };
   }
 
-  public static function getScrollTop(?doc : Document) {
+  public static function getScrollTop(?doc : HTMLDocument) {
     if(null == doc) doc = document;
-    if(null != document.documentElement)
-      return document.documentElement.scrollTop;
+    if(null != doc.documentElement)
+      return doc.documentElement.scrollTop;
     else
-      return document.body.scrollTop;
+      return doc.body.scrollTop;
   }
 
   public static function getOffset(el : Element, ?doc : HTMLDocument) {
