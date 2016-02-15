@@ -6,27 +6,27 @@ class TestHtml {
   public function new() {}
 
   public function testParseLI() {
-    var li = Html.parse("<li></li>");
+    var li = Html.parseElement("<li></li>");
     Assert.equals("LI", li.tagName);
   }
 
   public function testParseTD() {
-    var td = Html.parse("<td></td>");
+    var td = Html.parseElement("<td></td>");
     Assert.equals("TD", td.tagName);
   }
 
   public function testParseTR() {
-    var tr = Html.parse("<tr></tr>");
+    var tr = Html.parseElement("<tr></tr>");
     Assert.equals("TR", tr.tagName);
   }
 
   public function testParseTBODY() {
-    var tbody = Html.parse("<tbody></tbody>");
+    var tbody = Html.parseElement("<tbody></tbody>");
     Assert.equals("TBODY", tbody.tagName);
   }
 
   public function testParseTHEAD() {
-    var thead = Html.parse("<thead></thead>");
+    var thead = Html.parseElement("<thead></thead>");
     Assert.equals("THEAD", thead.tagName);
   }
 }
