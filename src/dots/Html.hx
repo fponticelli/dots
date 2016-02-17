@@ -33,8 +33,8 @@ class Html {
     var nodes = parseNodes(html);
     if(nodes.length > 1) {
       var doc = js.Browser.document.createDocumentFragment();
-      for(node in nodes)
-        doc.appendChild(node);
+      while(nodes.length > 0)
+        doc.appendChild(nodes[0]);
       return doc;
     } else {
       return nodes[0];
