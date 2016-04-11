@@ -160,4 +160,10 @@ class Dom {
   inline public static function empty(el : Element)
     el.innerHTML = "";
 
+  static function __init__() {
+#if polyfill
+    haxe.macro.Compiler.includeFile("src/dots/classList.js");
+    haxe.macro.Compiler.includeFile("src/dots/eventListener.js");
+#end
+  }
 }
