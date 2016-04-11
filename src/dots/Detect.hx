@@ -34,7 +34,7 @@ class Detect {
     return untyped !!js.Browser.window.Worker;
 
   public static function supportsOffline() : Bool
-    return null != js.Browser.window.applicationCache;
+    return null != untyped window.applicationCache;
 
   public static function supportsGeolocation() : Bool
     return Reflect.hasField(Browser.navigator, "geolocation");
