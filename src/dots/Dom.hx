@@ -73,7 +73,7 @@ class Dom {
   public inline static function nodeListToArray(list : NodeList) : Array<Element>
     return untyped __js__('Array.prototype.slice.call')(list, 0);
 
-  public static function create(name : String, ?attrs : Map<String, String>, ?children : Array<Element>, ?textContent : String, ?doc : Document) : Element {
+  public static function create(name : String, ?attrs : Map<String, String>, ?children : Array<Node>, ?textContent : String, ?doc : Document) : Element {
     var node = SelectorParser.parseSelector(name, attrs);
     if(null == doc) doc = document;
     var el = doc.createElement(node.tag);
