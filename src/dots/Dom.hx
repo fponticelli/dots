@@ -3,11 +3,130 @@ package dots;
 import js.html.Document;
 import js.html.HTMLDocument;
 import js.html.Element;
+import js.html.Event;
+import js.html.Node;
+import js.html.NodeList;
 import js.html.Window;
 import js.Browser.*;
 import haxe.ds.Either;
+using thx.Arrays;
 
 class Dom {
+  // class
+  inline public static function hasClass(el : Element, className : String)
+    return el.classList.contains(className);
+
+  inline public static function addClass(el : Element, className : String) {
+    el.classList.add(className);
+    return el;
+  }
+
+  inline public static function removeClass(el : Element, className : String) {
+    el.classList.remove(className);
+    return el;
+  }
+
+  // events
+  inline public static function on(el : Element, eventName : String, handler : EventHandler) {
+    el.addEventListener(eventName, handler.toCallback());
+    return el;
+  }
+
+  public static function once(el : Element, eventName : String, handler : EventHandler) {
+    function f(e) {
+      el.removeEventListener(eventName, f);
+      handler(e);
+    }
+    el.addEventListener(eventName, f);
+    return el;
+  }
+
+  inline public static function off(el : Element, eventName : String, handler : Event -> Void) {
+    el.removeEventListener(eventName, handler);
+    return el;
+  }
+
+  // utilities
+  public static function toString(node : Node) : String
+    return if(node.nodeType == Node.ELEMENT_NODE) {
+      (cast node : Element).outerHTML;
+    } else if(node.nodeType ==  Node.COMMENT_NODE) {
+      return '<!--${node.textContent}-->';
+    } else if(node.nodeType ==  Node.TEXT_NODE) {
+      return node.textContent;
+    } else {
+      throw new thx.Error('invalid nodeType ${node.nodeType}');
+    };
+
+  public static function nodeText(node : Node) : String
+    return if(node.nodeType == Node.ELEMENT_NODE) {
+      (cast node : Element).innerHTML;
+    } else if(node.nodeType ==  Node.COMMENT_NODE) {
+      return node.textContent;
+    } else if(node.nodeType ==  Node.TEXT_NODE) {
+      return node.textContent;
+    } else {
+      throw new thx.Error('invalid nodeType ${node.nodeType}');
+    };
+
+  // elements
+  public inline static function nodeListToArray(list : NodeList) : Array<Element>
+    return untyped __js__('Array.prototype.slice.call')(list, 0);
+
+  public static function create(name : String, ?attrs : Map<String, String>, ?children : Array<Element>, ?textContent : String, ?doc : Document) : Element {
+    var node = SelectorParser.parseSelector(name, attrs);
+    if(null == doc) doc = document;
+    var el = doc.createElement(node.tag);
+    for(key in node.attributes.keys()) {
+      Attributes.setStringAttribute(el, key, node.attributes.get(key));
+    }
+    if(null != children)
+      for(child in children)
+        el.appendChild(child);
+    if(null != textContent)
+      el.appendChild(doc.createTextNode(textContent));
+    return el;
+  }
+
+  public static function insertAtIndex(el : Element, child : Node, index : Int) {
+    el.insertBefore(child, el.children[index]);
+    return el;
+  }
+
+  static function prependChild(el : Element, child : Node) {
+    return insertAtIndex(el, child, 0);
+  }
+
+  static function prependChildren(el : Element, children : Array<Node>) : Element
+    return children.reduceRight(prependChild, el);
+
+  public static function prepend(el : Element, ?child : Node, ?children : Array<Node>) : Element {
+    if (child != null)
+      prependChild(el, child);
+    return prependChildren(el, children != null ? children : []);
+  }
+
+  static function appendChild(el : Element, child : Node) : Element {
+    el.appendChild(child);
+    return el;
+  }
+
+  static function appendChildren(el : Element, children : Array<Node>) : Element
+    return children.reduce(appendChild, el);
+
+  public static function append(el : Element, ?child : Node, ?children : Array<Node>) : Element {
+    if (child != null)
+      appendChild(el, child);
+    return appendChildren(el, children != null ? children : []);
+  }
+
+  public static function empty(el : Element) {
+    while (el.firstChild != null)
+      el.removeChild(el.firstChild);
+    return el;
+  }
+
+  // css
   public static function addCss(css : String, ?container : Element) {
     if(null == container)
       container = document.head;
@@ -16,6 +135,8 @@ class Dom {
     style.appendChild(document.createTextNode(css));
     container.appendChild(style);
   }
+
+  // properties and attributes
 
   public static function getValue(el : Element) : Null<String>
     return switch el.nodeName {
@@ -156,9 +277,6 @@ class Dom {
       doc.addEventListener('DOMContentLoaded', fn);
     }
   }
-
-  inline public static function empty(el : Element)
-    el.innerHTML = "";
 
   static function __init__() {
 #if polyfill

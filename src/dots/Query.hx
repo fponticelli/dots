@@ -15,7 +15,7 @@ class Query {
     return (ctx != null ? ctx : doc).querySelectorAll(selector);
 
   public inline static function select<T : Element>(selector : String, ?ctx : Element) : Array<T>
-    return cast Html.nodeListToArray(selectNodes(selector, ctx));
+    return cast Dom.nodeListToArray(selectNodes(selector, ctx));
 
   public static function getElementIndex(el : Element) {
     var index = 0;

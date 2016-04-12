@@ -13,3 +13,5 @@ dots.Html
 dots.Keys
 dots.Query
 dots.Style
+
+-cmd phantomjs bin/phantom.js
