@@ -126,6 +126,41 @@ class Dom {
     return el;
   }
 
+  static function flattenSiblingsAndChildren(node : Node) {
+    while(node != null) {
+      if(node.nodeType == Node.ELEMENT_NODE) {
+        flattenSiblingsAndChildren(node.childNodes[0]);
+      } else if(node.nodeType == Node.TEXT_NODE) {
+        while(null != node.nextSibling && node.nextSibling.nodeType == Node.TEXT_NODE) {
+          var a = node.textContent,
+              b = node.nextSibling.textContent;
+          node.parentNode.removeChild(node.nextSibling);
+          var t = js.Browser.document.createTextNode(a + b);
+          node.parentNode.replaceChild(t, node);
+          node = t;
+        }
+      }
+      node = node.nextSibling;
+    }
+  }
+
+  public static function flattenTextNodes(dom : Element)
+    flattenSiblingsAndChildren(dom.childNodes[0]);
+
+  public static function traverseTextNodes(dom : Element, f : Node -> Void) {
+    var collect : Array<Node> = [];
+    function perform(dom : Node) {
+      if(dom.nodeType == Node.TEXT_NODE) {
+        collect.push(dom);
+      } else if(dom.nodeType == Node.ELEMENT_NODE) {
+        for(child in dom.childNodes)
+          perform(child);
+      }
+    }
+    perform(dom);
+    for(n in collect) f(n);
+  }
+
   // css
   public static function addCss(css : String, ?container : Element) {
     if(null == container)
