@@ -26,6 +26,16 @@ class Dom {
     return el;
   }
 
+  public static function toggleClass(el: Element, className: String, ?condition: Bool) {
+    if(null == condition)
+      condition = !hasClass(el, className);
+    if(condition) {
+      addClass(el, className);
+    } else {
+      removeClass(el, className);
+    }
+  }
+
   // events
   inline public static function on(el : Element, eventName : String, handler : EventHandler) {
     el.addEventListener(eventName, handler.toCallback());
@@ -117,7 +127,9 @@ class Dom {
   public static function append(el : Element, ?child : Node, ?children : Array<Node>) : Element {
     if (child != null)
       appendChild(el, child);
-    return appendChildren(el, children != null ? children : []);
+    if (children != null && children.length > 0)
+      appendChildren(el, children);
+    return el;
   }
 
   public static function empty(el : Element) {
