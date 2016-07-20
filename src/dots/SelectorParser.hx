@@ -172,11 +172,11 @@ class SelectorParser {
     return char() == ".";
   }
 
-  function char() : String {
+  inline function char() : String {
     return selector.charAt(index);
   }
 
-  function code() : Int {
+  inline function code() : Int {
     return selector.charCodeAt(index);
   }
 }

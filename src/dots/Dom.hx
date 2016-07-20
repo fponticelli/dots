@@ -1,5 +1,6 @@
 package dots;
 
+#if !macro
 import js.html.Document;
 import js.html.HTMLDocument;
 import js.html.Element;
@@ -10,8 +11,84 @@ import js.html.Window;
 import js.Browser.*;
 import haxe.ds.Either;
 using thx.Arrays;
+#else
+import haxe.macro.Context;
+import haxe.macro.Expr;
+import haxe.macro.MacroStringTools;
+#end
 
 class Dom {
+  macro public static function create(args: Array<Expr>) {
+  // name : String, ?attrs : Map<String, String>, ?children : Array<Node>, ?textContent : String, ?doc : Document
+    var name = args[0];
+    var attrs = macro null;
+    var children = macro null;
+    var textContent = macro null;
+    var doc = macro null;
+    for(i in 1...args.length) {
+      switch Context.typeof(args[i]) {
+        case TInst(c, _) if(c.toString() == "String"):
+          textContent = args[i];
+        case TAbstract(a, [TInst(k, _), TInst(v, _)]) if(a.toString() == "Map" && k.toString() == "String" && v.toString() == "String"):
+          attrs = args[i];
+        case TInst(a, [TInst(e, _)]) if(a.toString() == "Array" && (e.toString() == "js.html.Node" || e.toString() == "js.html.Element")):
+          children = args[i];
+        case TInst(c, _) if(c.toString() == "js.html.Document"):
+          doc = args[i];
+        case TInst(a, [TMono(_)]) if(a.toString() == "Array"):
+          // most likely an empty array, do nothing
+        case other:
+          Context.error('invalid argument type: $other', Context.currentPos());
+      }
+    }
+
+    switch name.expr {
+      case EConst(CString(s)) if(Type.enumConstructor(MacroStringTools.formatString(s, name.pos).expr) == "EConst"):
+        var node = try SelectorParser.parseSelector(s) catch(e: Dynamic) {
+          trace(e);
+          Context.error('$e', Context.currentPos());
+        };
+        var tag = node.tag,
+            attributes = [];
+        for(name in node.attributes.keys()) {
+          attributes.push({ name : name, value : node.attributes.get(name) });
+        }
+        return macro ({
+          var doc: js.html.Document = $doc;
+          if(null == doc) doc = js.Browser.document;
+          var el = doc.createElement($v{tag});
+          for(o in $v{attributes})
+            el.setAttribute(o.name, o.value);
+          var attrs: Map<String, String> = $attrs;
+          if(null != attrs) {
+            for(attr in attrs.keys())
+              el.setAttribute(attr, attrs.get(attr));
+          }
+          var children: Array<Dynamic> = $children;
+          if(null != children)
+            for(child in children)
+              el.appendChild(child);
+          var textContent = $textContent;
+          if(null != textContent)
+            el.appendChild(doc.createTextNode(textContent));
+          el;
+        } : js.html.Element);
+      case other:
+        return macro dots.Dom.parse($name, $attrs, $children, $textContent, $doc);
+    }
+    // if(null == doc) doc = document;
+    // var el = doc.createElement(node.tag);
+    // for(key in node.attributes.keys()) {
+    //   Attributes.setStringAttribute(el, key, node.attributes.get(key));
+    // }
+    // if(null != children)
+    //   for(child in children)
+    //     el.appendChild(child);
+    // if(null != textContent)
+    //   el.appendChild(doc.createTextNode(textContent));
+  }
+
+#if !macro
   // class
   inline public static function hasClass(el : Element, className : String)
     return el.classList.contains(className);
@@ -83,7 +160,7 @@ class Dom {
   public inline static function nodeListToArray(list : NodeList) : Array<Element>
     return untyped __js__('Array.prototype.slice.call')(list, 0);
 
-  public static function create(name : String, ?attrs : Map<String, String>, ?children : Array<Node>, ?textContent : String, ?doc : Document) : Element {
+  public static function parse(name : String, ?attrs : Map<String, String>, ?children : Array<Node>, ?textContent : String, ?doc : Document) : Element {
     var node = SelectorParser.parseSelector(name, attrs);
     if(null == doc) doc = document;
     var el = doc.createElement(node.tag);
@@ -331,4 +408,5 @@ class Dom {
     haxe.macro.Compiler.includeFile("src/dots/eventListener.js");
 #end
   }
+#end
 }
