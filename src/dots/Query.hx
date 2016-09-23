@@ -30,4 +30,18 @@ class Query {
 
   public static function childrenOf<T : Element>(children : Array<Element>, parent : Element) : Array<T>
     return cast children.filter(function(child) return child.parentElement == parent);
+
+  public static function closest(element: Element, selector: String): Element {
+    while(!element.matches(selector)) {
+      element = element.parentElement;
+      if(null == element) return null;
+    }
+    return element;
+  }
+
+  static function __init__() {
+#if polyfill
+    haxe.macro.Compiler.includeFile("src/dots/matches.js");
+#end
+  }
 }

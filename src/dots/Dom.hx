@@ -103,6 +103,12 @@ class Dom {
     return el;
   }
 
+  public static function remove(node: Node): Node {
+    var parentNode = node.parentNode;
+    parentNode.removeChild(node);
+    return parentNode;
+  }
+
   public static function toggleClass(el: Element, className: String, ?condition: Bool) {
     if(null == condition)
       condition = !hasClass(el, className);
