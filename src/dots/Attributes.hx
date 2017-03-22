@@ -102,7 +102,7 @@ class Attributes {
     "cols" => PositiveNumericAttribute,
     //"colSpan" => null,
     //"content" => null,
-    //"contentEditable" => null,
+    "contentEditable" => BooleanAttribute,
     //"contextMenu" => null,
     "controls" => BooleanAttribute,
     //"coords" => null,
