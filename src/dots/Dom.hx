@@ -267,7 +267,6 @@ class Dom {
   }
 
   // properties and attributes
-
   public static function getValue(el : Element) : Null<String>
     return switch el.nodeName {
       case "INPUT":
@@ -378,7 +377,10 @@ class Dom {
   public static function getOffsetParent(el : Element)
     return null != el.offsetParent ? el.offsetParent : el;
 
-  inline public static function getOuterHeight(el : Element)
+  public static function getOuterHeight(el : Element)
+    return el.getBoundingClientRect().height;
+
+  inline public static function getOffsetHeight(el : Element)
     return el.offsetHeight;
 
   public static function getOuterHeightWithMargin(el : Element) {
@@ -387,7 +389,10 @@ class Dom {
     return h + Std.parseInt(s.marginTop) + Std.parseInt(s.marginBottom);
   }
 
-  inline public static function getOuterWidth(el : Element)
+  public static function getOuterWidth(el : Element)
+    return el.getBoundingClientRect().width;
+
+  inline public static function getOffsetWidth(el : Element)
     return el.offsetWidth;
 
   public static function getOuterWidthWithMargin(el : Element) {
