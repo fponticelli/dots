@@ -196,8 +196,8 @@ class Keys {
       case 18: Some(NonPrinting(Alt(Unknown)));
       case 20: Some(NonPrinting(CapsLock));
       case 145: Some(NonPrinting(ScrollLock));
-      case 91: Some(NonPrinting(MetaOrOS(Meta, Left))); // command (which is meta) on Mac, TODO: Linux, Windows?
-      // case 92 ? Select key vs WinLeft vs WinRight? is this dependant on the OS
+      case 91: Some(NonPrinting(MetaOrOS(Meta, Left))); // untested on Linux, but should report "Meta"
+      case 92: Some(NonPrinting(MetaOrOS(Meta, Right))); // unconfirmed, because this might not exist anymore?
       case 93: Some(NonPrinting(Select));
 
       case 106: Some(NamedPrinting(Multiply));
