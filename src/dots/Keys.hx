@@ -23,6 +23,10 @@ enum NamedCharacter {
   Subtract;
   DecimalPoint;
   Divide;
+  Tab;
+  Enter;
+  Backspace;
+  Delete;
 }
 
 enum IsNumpad {
@@ -43,9 +47,6 @@ enum LeftOrRight {
 }
 
 enum NonPrinting {
-  Backspace;
-  Tab;
-  Enter;
   Break;
   Escape;
   PageUp;
@@ -57,7 +58,6 @@ enum NonPrinting {
   RightArrow;
   DownArrow;
   Insert;
-  Delete;
   F(number: Int);
   Select;
   ContextMenu;
@@ -131,9 +131,9 @@ class Keys {
   public static function fromEventKey(code: Option<String>, key: String): Option<Key> {
     return switch key {
       // non-printing characters
-      case "Backspace": Some(NonPrinting(Backspace));
-      case "Tab": Some(NonPrinting(Tab));
-      case "Enter": Some(NonPrinting(Enter));
+      case "Backspace": Some(NamedPrinting(Backspace));
+      case "Tab": Some(NamedPrinting(Tab));
+      case "Enter": Some(NamedPrinting(Enter));
       case "Break" | "Pause": Some(NonPrinting(Break));
       case "Escape": Some(NonPrinting(Escape));
       case "PageUp": Some(NonPrinting(PageUp));
@@ -145,7 +145,7 @@ class Keys {
       case "ArrowRight": Some(NonPrinting(RightArrow));
       case "ArrowDown": Some(NonPrinting(DownArrow));
       case "Insert": Some(NonPrinting(Insert));
-      case "Delete": Some(NonPrinting(Delete));
+      case "Delete": Some(NamedPrinting(Delete));
       case "Select": Some(NonPrinting(Select));
       case "ContextMenu" | "Apps": Some(NonPrinting(ContextMenu));
       case "NumLock": Some(NonPrinting(NumLock));
@@ -175,9 +175,9 @@ class Keys {
   public static function fromEventCode(code: Int): Option<Key> {
     return switch code {
 
-      case 8: Some(NonPrinting(Backspace));
-      case 9: Some(NonPrinting(Tab));
-      case 13: Some(NonPrinting(Enter));
+      case 8: Some(NamedPrinting(Backspace));
+      case 9: Some(NamedPrinting(Tab));
+      case 13: Some(NamedPrinting(Enter));
       case 19: Some(NonPrinting(Break));
       case 27: Some(NonPrinting(Escape));
       case 33: Some(NonPrinting(PageUp));
@@ -189,7 +189,7 @@ class Keys {
       case 39: Some(NonPrinting(RightArrow));
       case 40: Some(NonPrinting(DownArrow));
       case 45: Some(NonPrinting(Insert));
-      case 46: Some(NonPrinting(Delete));
+      case 46: Some(NamedPrinting(Delete));
       case 144: Some(NonPrinting(NumLock));
       case 16: Some(NonPrinting(Shift(Unknown)));
       case 17: Some(NonPrinting(Control(Unknown)));
