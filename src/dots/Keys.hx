@@ -43,6 +43,7 @@ enum MetaOrOS {
 enum LeftOrRight {
   Left;
   Right;
+  NA;
   Unknown;
 }
 
@@ -62,19 +63,14 @@ enum NonPrinting {
   Select;
   ContextMenu;
   NumLock;
-  ScrollLock;
-  CapsLock;
-  Alt(leftOrRight: LeftOrRight);
-  Control(leftOrRight: LeftOrRight);
-  MetaOrOS(which: MetaOrOS, leftOrRight: LeftOrRight);
-  Shift(leftOrRight: LeftOrRight);
+  Modifier(mod: Modifier, leftOrRight: LeftOrRight);
 }
 
 enum Modifier {
   Alt;
   CapsLock;
   Control;
-  MetaOrOS;
+  MetaOrOS(which: MetaOrOS);
   ScrollLock;
   Shift;
 }
@@ -111,7 +107,8 @@ class Keys {
     var mappings = [
       { modifier: Alt, names: ["Alt"] },
       { modifier: CapsLock, names: ["CapsLock"] },
-      { modifier: MetaOrOS, names: ["Meta", "OS"] },
+      { modifier: MetaOrOS(Meta), names: ["Meta"] },
+      { modifier: MetaOrOS(OS), names: ["OS"] },
       { modifier: ScrollLock, names: ["ScrollLock"] },
       { modifier: Shift, names: ["Shift"] }
     ];
@@ -149,14 +146,14 @@ class Keys {
       case "Select": Some(NonPrinting(Select));
       case "ContextMenu" | "Apps": Some(NonPrinting(ContextMenu));
       case "NumLock": Some(NonPrinting(NumLock));
-      case "CapsLock": Some(NonPrinting(CapsLock));
-      case "ScrollLock": Some(NonPrinting(ScrollLock));
+      case "CapsLock": Some(NonPrinting(Modifier(CapsLock, NA)));
+      case "ScrollLock": Some(NonPrinting(Modifier(ScrollLock, NA)));
 
-      case "Alt": Some(NonPrinting(Alt(leftOrRight(code))));
-      case "Shift": Some(NonPrinting(Shift(leftOrRight(code))));
-      case "Control": Some(NonPrinting(Control(leftOrRight(code))));
-      case "Meta": Some(NonPrinting(MetaOrOS(Meta, leftOrRight(code))));
-      case "OS" | "Win": Some(NonPrinting(MetaOrOS(OS, leftOrRight(code))));
+      case "Alt": Some(NonPrinting(Modifier(Alt, leftOrRight(code))));
+      case "Shift": Some(NonPrinting(Modifier(Shift, leftOrRight(code))));
+      case "Control": Some(NonPrinting(Modifier(Control, leftOrRight(code))));
+      case "Meta": Some(NonPrinting(Modifier(MetaOrOS(Meta), leftOrRight(code))));
+      case "OS" | "Win": Some(NonPrinting(Modifier(MetaOrOS(OS), leftOrRight(code))));
 
       case some if (some.substring(0, 1) == "F" && thx.Ints.canParse(some.substring(1))):
         Some(NonPrinting(F(thx.Ints.parse(some.substring(1)))));
@@ -191,13 +188,13 @@ class Keys {
       case 45: Some(NonPrinting(Insert));
       case 46: Some(NamedPrinting(Delete));
       case 144: Some(NonPrinting(NumLock));
-      case 16: Some(NonPrinting(Shift(Unknown)));
-      case 17: Some(NonPrinting(Control(Unknown)));
-      case 18: Some(NonPrinting(Alt(Unknown)));
-      case 20: Some(NonPrinting(CapsLock));
-      case 145: Some(NonPrinting(ScrollLock));
-      case 91: Some(NonPrinting(MetaOrOS(Meta, Left))); // untested on Linux, but should report "Meta"
-      case 92: Some(NonPrinting(MetaOrOS(Meta, Right))); // unconfirmed, because this might not exist anymore?
+      case 16: Some(NonPrinting(Modifier(Shift, Unknown)));
+      case 17: Some(NonPrinting(Modifier(Control, Unknown)));
+      case 18: Some(NonPrinting(Modifier(Alt, Unknown)));
+      case 20: Some(NonPrinting(Modifier(CapsLock, Unknown)));
+      case 145: Some(NonPrinting(Modifier(ScrollLock, Unknown)));
+      case 91: Some(NonPrinting(Modifier(MetaOrOS(Meta), Left))); // untested on Linux, but should report "Meta"
+      case 92: Some(NonPrinting(Modifier(MetaOrOS(Meta), Right))); // unconfirmed, because this might not exist anymore?
       case 93: Some(NonPrinting(Select));
 
       case 106: Some(NamedPrinting(Multiply));
