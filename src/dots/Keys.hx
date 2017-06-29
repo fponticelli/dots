@@ -59,7 +59,7 @@ enum NonPrinting {
   Insert;
   Delete;
   F(number: Int);
-  SelectKey;
+  Select;
   ContextMenu;
   NumLock;
   ScrollLock;
@@ -146,7 +146,7 @@ class Keys {
       case "ArrowDown": Some(NonPrinting(DownArrow));
       case "Insert": Some(NonPrinting(Insert));
       case "Delete": Some(NonPrinting(Delete));
-      case "Select": Some(NonPrinting(SelectKey));
+      case "Select": Some(NonPrinting(Select));
       case "ContextMenu" | "Apps": Some(NonPrinting(ContextMenu));
       case "NumLock": Some(NonPrinting(NumLock));
       case "CapsLock": Some(NonPrinting(CapsLock));
@@ -198,7 +198,7 @@ class Keys {
       case 145: Some(NonPrinting(ScrollLock));
       case 91: Some(NonPrinting(MetaOrOS(Meta, Left))); // command (which is meta) on Mac, TODO: Linux, Windows?
       // case 92 ? Select key vs WinLeft vs WinRight? is this dependant on the OS
-      case 93: Some(NonPrinting(SelectKey));
+      case 93: Some(NonPrinting(Select));
 
       case 106: Some(NamedPrinting(Multiply));
       case 107: Some(NamedPrinting(Add));
