@@ -1,103 +1,218 @@
 package dots;
 
+import haxe.ds.Option;
+using thx.Arrays;
+using thx.Options;
+using thx.Strings;
+
+typedef KeyWithModifiers = {
+  key: Key,
+  modifiers: Array<Modifier>
+};
+
+enum Key {
+  Printing(char: thx.Char, isNumPad: IsNumpad); // `Unknown` if browser doesn't provide `event.code`
+  NamedPrinting(namedChar: NamedCharacter);
+  NonPrinting(key: NonPrinting);
+  Unknown(key: Option<String>, code: Option<String>, keyCode: Option<Int>, which: Option<Int>);
+}
+
+enum NamedCharacter {
+  Multiply;
+  Add;
+  Subtract;
+  DecimalPoint;
+  Divide;
+}
+
+enum IsNumpad {
+  Numpad;
+  NotNumpad;
+  Unknown;
+}
+
+enum MetaOrOS {
+  Meta;
+  OS;
+}
+
+enum LeftOrRight {
+  Left;
+  Right;
+  Unknown;
+}
+
+enum NonPrinting {
+  Backspace;
+  Tab;
+  Enter;
+  Break;
+  Escape;
+  PageUp;
+  PageDown;
+  End;
+  Home;
+  LeftArrow;
+  UpArrow;
+  RightArrow;
+  DownArrow;
+  Insert;
+  Delete;
+  F(number: Int);
+  Select;
+  ContextMenu;
+  NumLock;
+  ScrollLock;
+  CapsLock;
+  Alt(leftOrRight: LeftOrRight);
+  Control(leftOrRight: LeftOrRight);
+  MetaOrOS(which: MetaOrOS, leftOrRight: LeftOrRight);
+  Shift(leftOrRight: LeftOrRight);
+}
+
+enum Modifier {
+  Alt;
+  CapsLock;
+  Control;
+  MetaOrOS;
+  ScrollLock;
+  Shift;
+}
+
 class Keys {
-  public static inline var BACKSPACE = 8;
-  public static inline var TAB = 9;
-  public static inline var ENTER = 13;
-  public static inline var SHIFT = 16;
-  public static inline var CTRL = 17;
-  public static inline var ALT = 18;
-  public static inline var BREAK = 19;
-  public static inline var CAPS_LOCK = 20;
-  public static inline var ESCAPE = 27;
-  public static inline var SPACE = 32;
-  public static inline var PAGE_UP = 33;
-  public static inline var PAGE_DOWN = 34;
-  public static inline var END = 35;
-  public static inline var HOME = 36;
-  public static inline var LEFT_ARROW = 37;
-  public static inline var UP_ARROW = 38;
-  public static inline var RIGHT_ARROW = 39;
-  public static inline var DOWN_ARROW = 40;
-  public static inline var INSERT = 45;
-  public static inline var DELETE = 46;
-  public static inline var N0 = 48;
-  public static inline var N1 = 49;
-  public static inline var N2 = 50;
-  public static inline var N3 = 51;
-  public static inline var N4 = 52;
-  public static inline var N5 = 53;
-  public static inline var N6 = 54;
-  public static inline var N7 = 55;
-  public static inline var N8 = 56;
-  public static inline var N9 = 57;
-  public static inline var A = 65;
-  public static inline var B = 66;
-  public static inline var C = 67;
-  public static inline var D = 68;
-  public static inline var E = 69;
-  public static inline var F = 70;
-  public static inline var G = 71;
-  public static inline var H = 72;
-  public static inline var I = 73;
-  public static inline var J = 74;
-  public static inline var K = 75;
-  public static inline var L = 76;
-  public static inline var M = 77;
-  public static inline var N = 78;
-  public static inline var O = 79;
-  public static inline var P = 80;
-  public static inline var Q = 81;
-  public static inline var R = 82;
-  public static inline var S = 83;
-  public static inline var T = 84;
-  public static inline var U = 85;
-  public static inline var V = 86;
-  public static inline var W = 87;
-  public static inline var X = 88;
-  public static inline var Y = 89;
-  public static inline var Z = 90;
-  public static inline var LEFT_WINDOW_KEY = 91;
-  public static inline var RIGHT_WINDOW_KEY = 92;
-  public static inline var SELECT_KEY = 93;
-  public static inline var NUMPAD_0 = 96;
-  public static inline var NUMPAD_1 = 97;
-  public static inline var NUMPAD_2 = 98;
-  public static inline var NUMPAD_3 = 99;
-  public static inline var NUMPAD_4 = 100;
-  public static inline var NUMPAD_5 = 101;
-  public static inline var NUMPAD_6 = 102;
-  public static inline var NUMPAD_7 = 103;
-  public static inline var NUMPAD_8 = 104;
-  public static inline var NUMPAD_9 = 105;
-  public static inline var MULTIPLY = 106;
-  public static inline var ADD = 107;
-  public static inline var SUBTRACT = 109;
-  public static inline var DECIMAL_POINT = 110;
-  public static inline var DIVIDE = 111;
-  public static inline var F1 = 112;
-  public static inline var F2 = 113;
-  public static inline var F3 = 114;
-  public static inline var F4 = 115;
-  public static inline var F5 = 116;
-  public static inline var F6 = 117;
-  public static inline var F7 = 118;
-  public static inline var F8 = 119;
-  public static inline var F9 = 120;
-  public static inline var F10 = 121;
-  public static inline var F11 = 122;
-  public static inline var F12 = 123;
-  public static inline var NUM_LOCK = 144;
-  public static inline var SCROLL_LOCK = 145;
-  public static inline var SEMI_COLON = 186;
-  public static inline var EQUAL_SIGN = 187;
-  public static inline var COMMA = 188;
-  public static inline var DASH = 189;
-  public static inline var PERIOD = 190;
-  public static inline var FORWARD_SLASH = 191;
-  public static inline var GRAVE_ACCENT = 192;
-  public static inline var OPEN_BRACKET = 219;
-  public static inline var BACK_SLASH = 220;
-  public static inline var CLOSE_BRAKET = 221;
-  public static inline var SINGLE_QUOTE = 222;
+  public static function getKeyAndModifiers(evt: js.html.KeyboardEvent): KeyWithModifiers {
+    return {
+      key: getKey(evt),
+      modifiers: getModifiers(evt)
+    };
+  }
+
+  public static function getKey(evt: js.html.KeyboardEvent): Key {
+    var evtCode: Null<String> = untyped evt.code;
+
+    return Options.ofValue(evt.key)
+      .flatMap(fromEventKey.bind(Options.ofValue(evtCode)))
+      .orElse(
+        Options.ofValue(evt.which).orElse(Options.ofValue(evt.keyCode))
+          .flatMap(fromEventCode)
+      )
+      .getOrElse(Unknown(Options.ofValue(evt.key), Options.ofValue(evtCode), Options.ofValue(evt.keyCode), Options.ofValue(evt.which)));
+  }
+
+  static function leftOrRight(code: Option<String>): LeftOrRight {
+    return switch code {
+      case Some(v) if (v.endsWith("Left")): Left;
+      case Some(v) if (v.endsWith("Right")): Right;
+      case _: Unknown;
+    }
+  }
+
+  public static function getModifiers(evt: js.html.KeyboardEvent): Array<Modifier> {
+    var mappings = [
+      { modifier: Alt, names: ["Alt"] },
+      { modifier: CapsLock, names: ["CapsLock"] },
+      { modifier: MetaOrOS, names: ["Meta", "OS"] },
+      { modifier: ScrollLock, names: ["ScrollLock"] },
+      { modifier: Shift, names: ["Shift"] }
+    ];
+    return mappings.reduce(
+      function (acc: Array<Modifier>, curr) return curr.names.any(code -> evt.getModifierState(code)) ? acc.concat([curr.modifier]) : acc,
+      ([]: Array<Modifier>)
+    );
+  }
+
+  /**
+   *  Given an event code and an event key, try to figure out what kind of key was pressed,
+   *  returning `None` if no known keys match.
+   *  @param code - from event.code, optional because it isn't available in some browsers
+   *  @param key - from event.key, a string representation of the key press
+   *  @return Option<Key>
+   */
+  public static function fromEventKey(code: Option<String>, key: String): Option<Key> {
+    return switch key {
+      // non-printing characters
+      case "Backspace": Some(NonPrinting(Backspace));
+      case "Tab": Some(NonPrinting(Tab));
+      case "Enter": Some(NonPrinting(Enter));
+      case "Break" | "Pause": Some(NonPrinting(Break));
+      case "Escape": Some(NonPrinting(Escape));
+      case "PageUp": Some(NonPrinting(PageUp));
+      case "PageDown": Some(NonPrinting(PageDown));
+      case "End": Some(NonPrinting(End));
+      case "Home": Some(NonPrinting(Home));
+      case "ArrowLeft": Some(NonPrinting(LeftArrow));
+      case "ArrowUp": Some(NonPrinting(UpArrow));
+      case "ArrowRight": Some(NonPrinting(RightArrow));
+      case "ArrowDown": Some(NonPrinting(DownArrow));
+      case "Insert": Some(NonPrinting(Insert));
+      case "Delete": Some(NonPrinting(Delete));
+      case "Select": Some(NonPrinting(Select));
+      case "ContextMenu" | "Apps": Some(NonPrinting(ContextMenu));
+      case "NumLock": Some(NonPrinting(NumLock));
+      case "CapsLock": Some(NonPrinting(CapsLock));
+      case "ScrollLock": Some(NonPrinting(ScrollLock));
+
+      case "Alt": Some(NonPrinting(Alt(leftOrRight(code))));
+      case "Shift": Some(NonPrinting(Shift(leftOrRight(code))));
+      case "Control": Some(NonPrinting(Control(leftOrRight(code))));
+      case "Meta": Some(NonPrinting(MetaOrOS(Meta, leftOrRight(code))));
+      case "OS" | "Win": Some(NonPrinting(MetaOrOS(OS, leftOrRight(code))));
+
+      case some if (some.substring(0, 1) == "F" && thx.Ints.canParse(some.substring(1))):
+        Some(NonPrinting(F(thx.Ints.parse(some.substring(1)))));
+
+      case char if (char.length == 1):
+        switch code {
+          case None: Some(Printing(char, Unknown));
+          case Some(c) if (c.startsWith("Numpad")): Some(Printing(char, Numpad));
+          case Some(_): Some(Printing(char, NotNumpad));
+        }
+
+      case _: None;
+    };
+  }
+
+  public static function fromEventCode(code: Int): Option<Key> {
+    return switch code {
+
+      case 8: Some(NonPrinting(Backspace));
+      case 9: Some(NonPrinting(Tab));
+      case 13: Some(NonPrinting(Enter));
+      case 19: Some(NonPrinting(Break));
+      case 27: Some(NonPrinting(Escape));
+      case 33: Some(NonPrinting(PageUp));
+      case 34: Some(NonPrinting(PageDown));
+      case 35: Some(NonPrinting(End));
+      case 36: Some(NonPrinting(Home));
+      case 37: Some(NonPrinting(LeftArrow));
+      case 38: Some(NonPrinting(UpArrow));
+      case 39: Some(NonPrinting(RightArrow));
+      case 40: Some(NonPrinting(DownArrow));
+      case 45: Some(NonPrinting(Insert));
+      case 46: Some(NonPrinting(Delete));
+      case 144: Some(NonPrinting(NumLock));
+      case 16: Some(NonPrinting(Shift(Unknown)));
+      case 17: Some(NonPrinting(Control(Unknown)));
+      case 18: Some(NonPrinting(Alt(Unknown)));
+      case 20: Some(NonPrinting(CapsLock));
+      case 145: Some(NonPrinting(ScrollLock));
+      case 91: Some(NonPrinting(MetaOrOS(Meta, Left))); // untested on Linux, but should report "Meta"
+      case 92: Some(NonPrinting(MetaOrOS(Meta, Right))); // unconfirmed, because this might not exist anymore?
+      case 93: Some(NonPrinting(Select));
+
+      case 106: Some(NamedPrinting(Multiply));
+      case 107: Some(NamedPrinting(Add));
+      case 109: Some(NamedPrinting(Subtract));
+      case 110: Some(NamedPrinting(DecimalPoint));
+      case 111: Some(NamedPrinting(Divide));
+
+      case fn if (fn >= 112 && fn <= 130): Some(NonPrinting(F(fn - 111)));
+      case np if (np >= 96 && np <= 105): Some(Printing(np - 96, Numpad));
+
+      // otherwise, just try to convert the code into a UTF8 char,
+      // which might be wrong, but you only got here because your browser is ancient
+      case v if ((v >= 32 && v<= 127) || v >= 160): Some(Printing(thx.Char.fromInt(v), Unknown));
+      case _: None;
+    };
+  }
 }
