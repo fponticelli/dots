@@ -216,8 +216,15 @@ class Dom {
   }
 
   public static function empty(el : Element) {
-    while (el.firstChild != null)
-      el.removeChild(el.firstChild);
+    try {
+      while (el.firstChild != null) {
+        el.removeChild(el.firstChild);
+      }
+    } catch (e: Dynamic) {
+      // sometimes removeChild fails if there are blur events
+      // attached to the child? https://stackoverflow.com/questions/21926083/failed-to-execute-removechild-on-node
+      el.innerHTML = "";
+    }
     return el;
   }
 
