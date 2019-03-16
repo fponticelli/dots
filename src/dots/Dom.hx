@@ -29,7 +29,7 @@ class Dom {
       switch Context.typeof(args[i]) {
         case TInst(c, _) if(c.toString() == "String"):
           textContent = args[i];
-        case TAbstract(a, [TInst(k, _), TInst(v, _)]) if(a.toString() == "Map" && k.toString() == "String" && v.toString() == "String"):
+        case TAbstract(a, [TInst(k, _), TInst(v, _)]) if(a.toString() == "Map" || a.toString() == "haxe.ds.Map" && k.toString() == "String" && v.toString() == "String"):
           attrs = args[i];
         case TInst(a, [TInst(e, _)]) if(a.toString() == "Array" && (e.toString() == "js.html.Node" || e.toString() == "js.html.Element")):
           children = args[i];
